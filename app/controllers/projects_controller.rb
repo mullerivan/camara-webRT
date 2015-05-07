@@ -1,24 +1,28 @@
 class ProjectsController < ApplicationController
   before_action :set_project, only: [:show, :edit, :update, :destroy]
 
-  # GET /projects
-  # GET /projects.json
-
   def ajax_video_update
-
+    project = Project.find params[:project_id]
     video = params[:'video-blob']
-    params[:project_id]
-    File.open('/tmp/test.wb', 'wb') do |f|
+
+    video_count = project.videos.count + 1
+    save_path = Rails.root.join("public/videos")
+    video_name = "video_#{video_count}"
+
+    File.open("#{save_path}/#{video_name}", 'wb') do |f|
       f.write video.read
     end
 
+    # we create the video for the project
+    project.videos.create project: project, file: "#{save_path}/#{video_name}", name: video_name
+
     respond_to do |format|
-      format.html { render nothing: :true }
       format.js { render nothing: :true }
     end
-
   end
 
+  # GET /projects
+  # GET /projects.json
   def index
     @projects = Project.all
   end
