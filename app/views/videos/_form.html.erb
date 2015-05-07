@@ -55,9 +55,7 @@ document.querySelector('#start-recording').onclick = function() {
 };
 
 document.querySelector('#stop-recording').onclick = function() {
-    this.disabled = true;
-    url_ajax = 
-
+    this.disabled = true;   
     mediaRecorder.stop();
 
     document.querySelector('#start-recording').disabled = false;
