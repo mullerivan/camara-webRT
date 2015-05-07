@@ -12,32 +12,12 @@
         <div id="uploaded-videos-container"></div>
 
 
-<%# simple_form_for([@project, @video]) do |f| %>
-
-  <%# f.error_notification %>
-
-  <!-- <div class="form-inputs"> -->
-    <%# f.input :name %>
-    <%# f.input :description %>
-    <%# f.association :project %>
-    <%# f.input :file %>
-    <%# f.input :meters %>
-  <!-- </div> -->
-
-  <!-- <div class="form-actions"> -->
-    <%# f.button :submit %>
-  <!-- </div> -->
-<%# end %>
-
-
-
-
 <script type="text/javascript">
 
 //Global variables
 var url_ajax = "<%= project_ajax_video_update_path %>"
 var url_image_ajax = "<%= project_ajax_image_update_path %>"
-var videosContainer = document.getElementById('videos-container');
+var videos_container = document.getElementById('videos-container');
 var uploaded_videos_container = document.getElementById('uploaded-videos-container');
 //buttons controller
 document.querySelector('#snapshot').onclick = function() {
@@ -47,33 +27,33 @@ document.querySelector('#snapshot').onclick = function() {
     var img = document.createElement('img');
 
     img.src = dataURI;
-    videosContainer.appendChild(img);
+    videos_container.appendChild(img);
 
-    var formData = new FormData();
+    var form_data = new FormData();
 
-    formData.append('image-filename', 'snapshot');
-    formData.append('image-image', dataURI);
+    form_data.append('image-filename', 'snapshot');
+    form_data.append('image-image', dataURI);
 
-    send_image_ajax(url_image_ajax, formData, function (fileURL) {
+    sendImageAjax(url_image_ajax, form_data, function (fileURL) {
         //window.open(fileURL);
     });
 }
 
 document.querySelector('#start-recording').onclick = function() {
     this.disabled = true;
-    navigator.getUserMedia(mediaConstraints, onMediaSuccess, onMediaError);
+    navigator.getUserMedia(media_constraints, onMediaSuccess, onMediaError);
 };
 
 document.querySelector('#stop-recording').onclick = function() {
     this.disabled = true;   
-    mediaRecorder.stop();
+    media_recorder.stop();
 
     document.querySelector('#start-recording').disabled = false;
     document.querySelector('#snapshot').disabled = true;
     //delete video element
     var v = document.getElementsByTagName('video');
     v = document.querySelector('#video-player');
-    videosContainer.removeChild(v);
+    videos_container.removeChild(v);
     //deleted    
 };
 

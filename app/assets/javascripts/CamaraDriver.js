@@ -1,9 +1,9 @@
 /**
  * Created by ivan on 5/05/15.
  */
-var mediaConstraints = { audio: !!navigator.mozGetUserMedia, video: true };
-var timeInterval = 7200 * 1000;
-var mediaRecorder;
+var media_constraints = { audio: !!navigator.mozGetUserMedia, video: true };
+var time_interval = 7200 * 1000;
+var media_recorder;
 var index = 1;
 function onMediaSuccess(stream) {
     var video = document.createElement('video');
@@ -19,29 +19,28 @@ function onMediaSuccess(stream) {
 
     video.play();
 
-    videosContainer.appendChild(video);
-    videosContainer.appendChild(document.createElement('hr'));
-
+    videos_container.appendChild(video);
+    videos_container.appendChild(document.createElement('hr'));
     
-    mediaRecorder = new MediaStreamRecorder(stream);
-    mediaRecorder.mimeType = 'video/webm'; // this line is mandatory
-    mediaRecorder.videoWidth  = videoWidth;
-    mediaRecorder.videoHeight = videoHeight;
-    mediaRecorder.ondataavailable = function(blob) {
+    media_recorder = new MediaStreamRecorder(stream);
+    media_recorder.mimeType = 'video/webm'; // this line is mandatory
+    media_recorder.videoWidth  = videoWidth;
+    media_recorder.videoHeight = videoHeight;
+    media_recorder.ondataavailable = function(blob) {
         var fileType = 'video'; // or "audio"
         var fileName = 'test.webm';  // or "wav" or "ogg"
-        var formData = new FormData();
+        var form_data = new FormData();
 
-        formData.append(fileType + '-filename', fileName);
-        formData.append(fileType + '-blob', blob);
+        form_data.append(fileType + '-filename', fileName);
+        form_data.append(fileType + '-blob', blob);
 
-        send_video_ajax(url_ajax, formData,blob, function (fileURL) {
+        sendVideoAjax(url_ajax, form_data,blob, function (fileURL) {
             window.open(fileURL);
         });
 };
 
     // get blob after specific time interval
-    mediaRecorder.start(timeInterval);
+    media_recorder.start(time_interval);
 
     document.querySelector('#stop-recording').disabled = false;
     document.querySelector('#snapshot').disabled = false;
@@ -64,12 +63,12 @@ window.onbeforeunload = function() {
     document.querySelector('#start-recording').disabled = false;
 };
 
-function capture(video, scaleFactor) {
-    if(scaleFactor == null){
-        scaleFactor = 1;
+function capture(video, scale_factor) {
+    if(scale_factor == null){
+        scale_factor = 1;
     }
-    var w = document.getElementById('video-width').value * scaleFactor;
-    var h = document.getElementById('video-height').value * scaleFactor;
+    var w = document.getElementById('video-width').value * scale_factor;
+    var h = document.getElementById('video-height').value * scale_factor;
     var canvas = document.createElement('canvas');
     canvas.width  = w;
     canvas.height = h;
@@ -78,7 +77,7 @@ function capture(video, scaleFactor) {
     return canvas;
 }
 
-function send_video_ajax(url, data, blob,callback) {
+function sendVideoAjax(url, data, blob,callback) {
     var request = new XMLHttpRequest();
     request.onreadystatechange = function () {
         if (request.readyState == 4 && request.status == 200) {
@@ -103,7 +102,7 @@ function send_video_ajax(url, data, blob,callback) {
 // https://stackoverflow.com/questions/166221/how-can-i-upload-files-asynchronously
         }
 
-function send_image_ajax(url, data, blob,callback) {
+function sendImageAjax(url, data, blob,callback) {
     var request = new XMLHttpRequest();
     request.onreadystatechange = function () {
         if (request.readyState == 4 && request.status == 200) {
