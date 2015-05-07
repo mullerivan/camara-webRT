@@ -1,0 +1,29 @@
+<div class="page-header">
+  <%= link_to videos_path, class: 'btn btn-default' do %>
+    <span class="glyphicon glyphicon-list-alt"></span>
+    Back
+  <% end %>
+  <%= link_to edit_video_path(@video), class: 'btn btn-primary' do %>
+    <span class="glyphicon glyphicon-pencil"></span>
+    Edit
+  <% end %>
+  <h1>Show video</h1>
+</div>
+
+<dl class="dl-horizontal">
+  <dt>Name:</dt>
+  <dd><%= @video.name %></dd>
+
+  <dt>Description:</dt>
+  <dd><%= @video.description %></dd>
+
+  <dt>Project:</dt>
+  <dd><%= @video.project %></dd>
+
+  <dt>Video:</dt>
+  <dd><%= @video.video %></dd>
+
+  <dt>Meters:</dt>
+  <dd><%= @video.meters %></dd>
+
+</dl>

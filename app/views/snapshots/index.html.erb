@@ -1,0 +1,35 @@
+<div class="page-header">
+  <%= link_to new_snapshot_path, class: 'btn btn-primary' do %>
+    <span class="glyphicon glyphicon-plus"></span>
+    New Snapshot
+  <% end %>
+  <h1>Listing snapshots</h1>
+</div>
+
+<div class="table-responsive">
+  <table class="table table-striped table-bordered table-hover">
+    <thead>
+      <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Video</th>
+            <th>File</th>
+            <th></th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <%= content_tag_for(:tr, @snapshots) do |snapshot| %>
+            <td><%= snapshot.name %></td>
+            <td><%= snapshot.description %></td>
+            <td><%= snapshot.video %></td>
+            <td><%= snapshot.file %></td>
+            <td><%= link_to 'Show', snapshot %></td>
+        <td><%= link_to 'Edit', edit_snapshot_path(snapshot) %></td>
+        <td><%= link_to 'Destroy', snapshot, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      <% end %>
+    </tbody>
+  </table>
+</div>
