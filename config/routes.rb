@@ -1,13 +1,15 @@
 Rails.application.routes.draw do  
+  root 'projects#index'
+
   resources :projects do
     post 'ajax_video_update'
+    post 'ajax_image_update'
+
     resources :videos do
-
       resources :snapshots
-
     end
   end
-  root 'projects#index'
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

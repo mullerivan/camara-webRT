@@ -21,6 +21,24 @@ class ProjectsController < ApplicationController
     end
   end
 
+  # FIXME: snapshot pertenece a un video. pero si creamos un snapshot ANTES que el video?
+  # TO-DO: improve this
+  def ajax_image_update
+    project = Project.find params[:project_id]
+    image = params[:'image-image']
+
+    save_path = Rails.root.join("public/videos")
+    image_name = "project_#{project.name}_snapshot"
+
+    File.open("#{save_path}/#{image_name}.jpg", 'wb') do |f|
+      f.write(Base64.decode64(image['data:image/jpeg;base64,'.length .. -1]))
+    end
+
+    respond_to do |format|
+      format.js { render nothing: :true }
+    end
+  end
+
   # GET /projects
   # GET /projects.json
   def index
