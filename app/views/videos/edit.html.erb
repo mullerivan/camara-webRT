@@ -1,13 +1,26 @@
 <div class="page-header">
-  <%= link_to project_videos_path, class: 'btn btn-default' do %>
+  <%= link_to project_video_path, class: 'btn btn-default' do %>
     <span class="glyphicon glyphicon-list-alt"></span>
     Back
   <% end %>
-  <%= link_to @video, class: 'btn btn-primary' do %>
+  <%= link_to project_video_path, class: 'btn btn-primary' do %>
     <span class="glyphicon glyphicon-info-sign"></span>
     Show
   <% end %>
-  <h1>NO HAY EDICION DEL VIDEO! SOLO SE BORRA Y LOS NUEVOS SNAPSHOTS SALEN DESDE EL VIEW!</h1>
+  <h1>Edit Video metadata</h1>
 </div>
 
-<%# render 'form' %>
+<%= simple_form_for @video, 
+    url: project_video_path,
+    method: 'PATCH'  do |f| %>
+  <%= f.error_notification %>
+  <div class="form-inputs">
+    <%= f.input :name %>
+    <%= f.input :description %>
+    <%= f.input :meters %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>
