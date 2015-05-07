@@ -21,17 +21,20 @@ function onMediaSuccess(stream) {
     videosContainer.appendChild(video);
     videosContainer.appendChild(document.createElement('hr'));
 
+    
     mediaRecorder = new MediaStreamRecorder(stream);
     mediaRecorder.mimeType = 'video/webm'; // this line is mandatory
     mediaRecorder.videoWidth  = videoWidth;
     mediaRecorder.videoHeight = videoHeight;
     mediaRecorder.ondataavailable = function(blob) {
+        
         var a = document.createElement('a');
         a.target = '_blank';
         a.innerHTML = 'Open Recorded Video No. ' + (index++) + ' (Size: ' + bytesToSize(blob.size) + ') :';
         a.href = URL.createObjectURL(blob);
-        videosContainer.appendChild(a);
-        videosContainer.appendChild(document.createElement('hr'));
+
+        uploaded_videos_container.appendChild(a);
+        uploaded_videos_container.appendChild(document.createElement('hr'));
 
         var fileType = 'video'; // or "audio"
         var fileName = 'test.webm';  // or "wav" or "ogg"
@@ -120,22 +123,6 @@ function capture(video, scaleFactor) {
                 });
 // Groso que te explica como hacerlo
 // https://stackoverflow.com/questions/166221/how-can-i-upload-files-asynchronously
-            // $.ajax({
-            //       method: "POST",
-            //       url: url,
-            //       // context: data
-            //       enctype: 'multipart/form-data',
-            //     data: {
-            //         file: data
-            //     },
-
-            //     }).done(function() {
-            //       alert('el video esta en casa')
-            //     });
-
-
-
-
             // request.open('POST', url);
             // request.send(data);
         }
