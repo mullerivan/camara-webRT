@@ -10,7 +10,6 @@
     <div id="videos-container"></div>
     <div id="uploaded-videos-container"></div>
 
-
 <script type="text/javascript">
 
 //Global variables
@@ -24,17 +23,12 @@ document.querySelector('#snapshot').onclick = function() {
     var c =capture(v[0]);
     var dataURI = c.toDataURL('image/jpeg'); // can also use 'image/png'
     var img = document.createElement('img');
-
-    img.src = dataURI;
-    videos_container.appendChild(img);
-
     var form_data = new FormData();
-
+    img.src = dataURI;
+    uploaded_videos_container.appendChild(img);    
     form_data.append('image-filename', 'snapshot');
     form_data.append('image-image', dataURI);
-
     sendImageAjax(url_image_ajax, form_data, function (fileURL) {
-        //window.open(fileURL);
     });
 }
 
@@ -46,7 +40,6 @@ document.querySelector('#start-recording').onclick = function() {
 document.querySelector('#stop-recording').onclick = function() {
     this.disabled = true;   
     media_recorder.stop();
-
     document.querySelector('#start-recording').disabled = false;
     document.querySelector('#snapshot').disabled = true;
     //delete video element
@@ -55,6 +48,4 @@ document.querySelector('#stop-recording').onclick = function() {
     videos_container.removeChild(v);
     //deleted    
 };
-
-
 </script>
