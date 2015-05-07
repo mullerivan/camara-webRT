@@ -53,7 +53,9 @@
             <td><%= video.name %></td>
             <td><%= video.description %></td>
             <td><%= video.meters %></td>
-            <td><%= link_to 'Show', project_video_path(@project, video) %></td>
+            <td><%= link_to 'Show', project_video_path(@project, video), class: "btn btn-info" %>
+        <%= link_to 'Edit Metadata', edit_project_video_path(@project, video), class: "btn btn-primary"  %>
+            </td>
       <% end %>
     </tbody>
   </table>
