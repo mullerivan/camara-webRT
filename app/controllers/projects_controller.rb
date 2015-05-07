@@ -7,7 +7,7 @@ class ProjectsController < ApplicationController
 
     video_count = project.videos.count + 1
     save_path = Rails.root.join("public/videos")
-    video_name = "video_#{video_count}"
+    video_name = "project_#{project.name}_video_#{video_count}"
 
     File.open("#{save_path}/#{video_name}", 'wb') do |f|
       f.write video.read

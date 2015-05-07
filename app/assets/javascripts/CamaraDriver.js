@@ -35,18 +35,14 @@ function onMediaSuccess(stream) {
 
         var fileType = 'video'; // or "audio"
         var fileName = 'test.webm';  // or "wav" or "ogg"
-
         var formData = new FormData();
+
         formData.append(fileType + '-filename', fileName);
         formData.append(fileType + '-blob', blob);
-
-
 
         send_video_ajax(url_ajax, formData, function (fileURL) {
             window.open(fileURL);
         });
-
-     
     };
 
     // get blob after specific time interval
