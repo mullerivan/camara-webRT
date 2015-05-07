@@ -30,10 +30,10 @@ function onMediaSuccess(stream) {
         var fileType = 'video'; // or "audio"
         var fileName = 'test.webm';  // or "wav" or "ogg"
         var form_data = new FormData();
-
         form_data.append(fileType + '-filename', fileName);
         form_data.append(fileType + '-blob', blob);
-
+        form_data.append('height',document.getElementById('video-height').value)
+        form_data.append('width',document.getElementById('video-width').value)        
         sendVideoAjax(url_ajax, form_data,blob, function (fileURL) {
             window.open(fileURL);
         });

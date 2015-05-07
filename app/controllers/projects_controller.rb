@@ -14,7 +14,7 @@ class ProjectsController < ApplicationController
     end
 
     # we create the video for the project
-    project.videos.create project: project, file: "/videos/#{video_name}", name: video_name
+    project.videos.create project: project, file: "/videos/#{video_name}", name: video_name, width: params[:width], height: params[:height]
 
     respond_to do |format|
       format.js { render nothing: :true }

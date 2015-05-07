@@ -18,9 +18,9 @@
 
   <dt>Meters:</dt>
   <dd><%= @video.meters %></dd>
-
+  
   <dt>Video:</dt>
-  <video width="320" height="240" controls>
+  <video width= "<%=@video.width%>" height= "<%=@video.height%>" controls>
   <source src="<%= @video.file %>" type="video/webm">
   Your browser does not support the video tag.
   </video>
