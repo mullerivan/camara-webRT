@@ -12,8 +12,7 @@
       <tr>
             <th>Name</th>
             <th>Description</th>
-            <th>Begin</th>
-            <th>End</th>
+            <th>Date</th>
             <th>Place</th>
             <th></th>
         <th></th>
@@ -25,8 +24,7 @@
       <%= content_tag_for(:tr, @projects) do |project| %>
             <td><%= project.name %></td>
             <td><%= project.description %></td>
-            <td><%= project.begin %></td>
-            <td><%= project.end %></td>
+            <td><%= project.date %></td>
             <td><%= project.place %></td>
             <td><%= link_to 'Show', project %></td>
         <td><%= link_to 'Edit', edit_project_path(project) %></td>
