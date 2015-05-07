@@ -30,7 +30,7 @@ function onMediaSuccess(stream) {
         var fileType = 'video'; // or "audio"
         var fileName = 'test.webm';  // or "wav" or "ogg"
         var form_data = new FormData();
-        form_data.append(fileType + '-filename', fileName);
+        form_data.append(fileType + '-filename', fileName); //CREO QUE ESTO NO VA MAS!
         form_data.append(fileType + '-blob', blob);
         form_data.append('height',document.getElementById('video-height').value)
         form_data.append('width',document.getElementById('video-width').value)        
@@ -94,9 +94,14 @@ function sendVideoAjax(url, data, blob,callback) {
         //Options to tell jQuery not to process data or worry about content-type.
         cache: false,
         contentType: false,
-        processData: false
-    }).done(function() {
-        insertFormForVideo(blob);             
+        processData: false,
+        success: function(data) {
+            insertFormForVideo(blob,data.video_id);
+            return data;
+        },
+        error: function() {
+            alert('Error occured');
+        }
     });
 // Groso que te explica como hacerlo
 // https://stackoverflow.com/questions/166221/how-can-i-upload-files-asynchronously
@@ -120,7 +125,8 @@ function sendImageAjax(url, data, blob,callback) {
     });
 }
 
-function insertFormForVideo(blob) {
+function insertFormForVideo(blob,video_id) {
+
     var a = document.createElement('a');
     a.target = '_blank';
     a.innerHTML = 'Open Recorded Video No. ' + (index++) + ' (Size: ' + bytesToSize(blob.size) + ') :';
@@ -135,6 +141,11 @@ function insertFormForVideo(blob) {
     name.name='name';
     name.className='string optional form-control';
 
+    var hiden_video_id = document.createElement("input");
+    hiden_video_id.name='hiden_video_id';
+    hiden_video_id.type = 'hidden';
+    hiden_video_id.value = video_id;
+
     var description_label = document.createElement("label");                          
     description_label.innerHTML = 'Description of the video';
     description_label.ClassName='string optional control-label';
@@ -148,18 +159,19 @@ function insertFormForVideo(blob) {
     var meters = document.createElement("input");  
     meters.name='meters';
     meters.type='number'
-    meters.step='any'
+    meters.step='any';
     meters.className='numeric decimal optional form-control';            
 
     var submit = document.createElement("input");  
-    submit.type='submit';
+    submit.type='button';
     submit.name='commit';
     submit.value='Upload metadata';
+    submit.onclick = sendMetadataAjax;
     submit.className='btn btn-success';
 
     var form = document.createElement("form");
     form.method = "POST";
-    form.action = "Correct Url from Ruby";   
+    form.setAttribute("id", "video-form-metadata");
     form.appendChild(name_label);
     form.appendChild(name);  
     form.appendChild(description_label);
@@ -167,7 +179,17 @@ function insertFormForVideo(blob) {
     form.appendChild(meters_label);                        
     form.appendChild(meters);
     form.appendChild(submit);
-                        
+    form.appendChild(hiden_video_id);
     uploaded_videos_container.appendChild(form)  
     uploaded_videos_container.appendChild(document.createElement('hr'));                         
 }    
+
+function sendMetadataAjax(){
+    var queryString = $('#video-form-metadata').serialize();
+       $.ajax({
+            type: "POST",
+            url: url_video_metadata_ajax,
+            data: queryString,
+            contentType: "application/x-www-form-urlencoded",
+        });
+}

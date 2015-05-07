@@ -1,6 +1,18 @@
 class ProjectsController < ApplicationController
   before_action :set_project, only: [:show, :edit, :update, :destroy]
 
+  def ajax_videometadata_update
+    video = Video.find(params[:hiden_video_id])
+    video.meters = params[:meters]
+    video.name = params[:name]
+    video.description = params[:description]
+    video.save
+    raise @video.to_yaml
+    respond_to do |format|
+      format.js { render nothing: :true }
+    end
+  end
+
   def ajax_video_update
     project = Project.find params[:project_id]
     video = params[:'video-blob']
@@ -15,9 +27,10 @@ class ProjectsController < ApplicationController
 
     # we create the video for the project
     project.videos.create project: project, file: "/videos/#{video_name}", name: video_name, width: params[:width], height: params[:height]
+    video_id = project.videos.last.id
 
     respond_to do |format|
-      format.js { render nothing: :true }
+      format.json { render :json => { :video_id => video_id } }
     end
   end
 

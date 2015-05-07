@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   resources :projects do
     post 'ajax_video_update'
     post 'ajax_image_update'
-
+    post 'ajax_videometadata_update'
     resources :videos, only: [:show, :new, :create] do
       resources :snapshots
     end
