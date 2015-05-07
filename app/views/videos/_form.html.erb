@@ -9,6 +9,7 @@
         <button id="snapshot" class="btn btn-primary" disabled>Snapshot</button>
     </div>
         <div id="videos-container"></div>
+        <div id="uploaded-videos-container"></div>
 
 
 <%# simple_form_for([@project, @video]) do |f| %>
@@ -37,6 +38,7 @@
 var url_ajax = "<%= project_ajax_video_update_path %>"
 var timeInterval = 7200 * 1000;
 var videosContainer = document.getElementById('videos-container');
+var uploaded_videos_container = document.getElementById('uploaded-videos-container');
 var index = 1;
 //buttons controller
 document.querySelector('#snapshot').onclick = function() {
