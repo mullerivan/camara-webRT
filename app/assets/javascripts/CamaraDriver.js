@@ -119,6 +119,8 @@ function capture(video, scaleFactor) {
                     cache: false,
                     contentType: false,
                     processData: false
+                }).done(function() {
+                  alert('En esta funcion hay que crear el formulario para actualizar los datos de este video')
                 });
 // Groso que te explica como hacerlo
 // https://stackoverflow.com/questions/166221/how-can-i-upload-files-asynchronously
