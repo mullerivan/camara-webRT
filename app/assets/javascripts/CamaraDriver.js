@@ -2,8 +2,9 @@
  * Created by ivan on 5/05/15.
  */
 var mediaConstraints = { audio: !!navigator.mozGetUserMedia, video: true };
-
+var timeInterval = 7200 * 1000;
 var mediaRecorder;
+var index = 1;
 function onMediaSuccess(stream) {
     var video = document.createElement('video');
     video.setAttribute("id", "video-player");
@@ -27,15 +28,6 @@ function onMediaSuccess(stream) {
     mediaRecorder.videoWidth  = videoWidth;
     mediaRecorder.videoHeight = videoHeight;
     mediaRecorder.ondataavailable = function(blob) {
-        
-        var a = document.createElement('a');
-        a.target = '_blank';
-        a.innerHTML = 'Open Recorded Video No. ' + (index++) + ' (Size: ' + bytesToSize(blob.size) + ') :';
-        a.href = URL.createObjectURL(blob);
-
-        uploaded_videos_container.appendChild(a);
-        uploaded_videos_container.appendChild(document.createElement('hr'));
-
         var fileType = 'video'; // or "audio"
         var fileName = 'test.webm';  // or "wav" or "ogg"
         var formData = new FormData();
@@ -43,10 +35,10 @@ function onMediaSuccess(stream) {
         formData.append(fileType + '-filename', fileName);
         formData.append(fileType + '-blob', blob);
 
-        send_video_ajax(url_ajax, formData, function (fileURL) {
+        send_video_ajax(url_ajax, formData,blob, function (fileURL) {
             window.open(fileURL);
         });
-    };
+};
 
     // get blob after specific time interval
     mediaRecorder.start(timeInterval);
@@ -72,9 +64,6 @@ window.onbeforeunload = function() {
     document.querySelector('#start-recording').disabled = false;
 };
 
-
-
-
 function capture(video, scaleFactor) {
     if(scaleFactor == null){
         scaleFactor = 1;
@@ -89,47 +78,97 @@ function capture(video, scaleFactor) {
     return canvas;
 }
 
-
-
-   function send_video_ajax(url, data, callback) {
-            var request = new XMLHttpRequest();
-            request.onreadystatechange = function () {
-                if (request.readyState == 4 && request.status == 200) {
-                    callback(location.href + request.responseText);
-                }
-            };    
-            $.ajax({
-                    url: url,  //Server script to process data
-                    type: 'POST',
-                    // xhr: function() {  // Custom XMLHttpRequest
-                    //     var myXhr = $.ajaxSettings.xhr();
-                    //     if(myXhr.upload){ // Check if upload property exists
-                    //         myXhr.upload.addEventListener('progress',progressHandlingFunction, false); // For handling the progress of the upload
-                    //     }
-                    //     return myXhr;
-                    // },
-                    //Ajax events
-                    // beforeSend: beforeSendHandler,
-                    // success: completeHandler,
-                    // error: errorHandler,
-                    // Form data
-                    data: data,
-                    //Options to tell jQuery not to process data or worry about content-type.
-                    cache: false,
-                    contentType: false,
-                    processData: false
-                }).done(function() {
-                  alert('En esta funcion hay que crear el formulario para actualizar los datos de este video')
-                });
+function send_video_ajax(url, data, blob,callback) {
+    var request = new XMLHttpRequest();
+    request.onreadystatechange = function () {
+        if (request.readyState == 4 && request.status == 200) {
+            callback(location.href + request.responseText);
+        }
+    };    
+    $.ajax({
+        url: url,  //Server script to process data
+        type: 'POST',                            
+        // beforeSend: beforeSendHandler,
+        // success: completeHandler,
+        // error: errorHandler,    
+        data: data,
+        //Options to tell jQuery not to process data or worry about content-type.
+        cache: false,
+        contentType: false,
+        processData: false
+    }).done(function() {
+        insertFormForVideo(blob);             
+    });
 // Groso que te explica como hacerlo
 // https://stackoverflow.com/questions/166221/how-can-i-upload-files-asynchronously
-            // request.open('POST', url);
-            // request.send(data);
         }
 
-
-function progressHandlingFunction(e){
-    if(e.lengthComputable){
-        $('progress').attr({value:e.loaded,max:e.total});
-    }
+function send_image_ajax(url, data, blob,callback) {
+    var request = new XMLHttpRequest();
+    request.onreadystatechange = function () {
+        if (request.readyState == 4 && request.status == 200) {
+            callback(location.href + request.responseText);
+            }
+        };    
+    $.ajax({
+        url: url,  //Server script to process data
+        type: 'POST',                    
+        data: data,
+        //Options to tell jQuery not to process data or worry about content-type.
+        cache: false,
+        contentType: false,
+        processData: false
+    });
 }
+
+function insertFormForVideo(blob) {
+    var a = document.createElement('a');
+    a.target = '_blank';
+    a.innerHTML = 'Open Recorded Video No. ' + (index++) + ' (Size: ' + bytesToSize(blob.size) + ') :';
+    a.href = URL.createObjectURL(blob);
+    uploaded_videos_container.appendChild(document.createElement('hr'));
+    uploaded_videos_container.appendChild(a);
+
+    var name_label = document.createElement("label");                          
+    name_label.innerHTML = 'Name of the video'
+    name_label.ClassName='string optional control-label'                                              
+    var name = document.createElement("input"); 
+    name.name='name';
+    name.className='string optional form-control';
+
+    var description_label = document.createElement("label");                          
+    description_label.innerHTML = 'Description of the video';
+    description_label.ClassName='string optional control-label';
+    var description = document.createElement("input");  
+    description.name='description';
+    description.className='string optional form-control';
+
+    var meters_label = document.createElement("label");                          
+    meters_label.innerHTML = 'Meters'
+    meters_label.ClassName='string optional control-label'                                              
+    var meters = document.createElement("input");  
+    meters.name='meters';
+    meters.type='number'
+    meters.step='any'
+    meters.className='numeric decimal optional form-control';            
+
+    var submit = document.createElement("input");  
+    submit.type='submit';
+    submit.name='commit';
+    submit.value='Upload metadata';
+    submit.className='btn btn-success';
+
+    var form = document.createElement("form");
+    form.method = "POST";
+    form.action = "Correct Url from Ruby";   
+    form.appendChild(name_label);
+    form.appendChild(name);  
+    form.appendChild(description_label);
+    form.appendChild(description);
+    form.appendChild(meters_label);                        
+    form.appendChild(meters);
+    form.appendChild(submit);
+                        
+    uploaded_videos_container.appendChild(form)  
+    uploaded_videos_container.appendChild(document.createElement('hr'));                         
+}    

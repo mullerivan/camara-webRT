@@ -37,10 +37,8 @@
 //Global variables
 var url_ajax = "<%= project_ajax_video_update_path %>"
 var url_image_ajax = "<%= project_ajax_image_update_path %>"
-var timeInterval = 7200 * 1000;
 var videosContainer = document.getElementById('videos-container');
 var uploaded_videos_container = document.getElementById('uploaded-videos-container');
-var index = 1;
 //buttons controller
 document.querySelector('#snapshot').onclick = function() {
     var v = document.getElementsByTagName('video');
@@ -56,7 +54,7 @@ document.querySelector('#snapshot').onclick = function() {
     formData.append('image-filename', 'snapshot');
     formData.append('image-image', dataURI);
 
-    send_video_ajax(url_image_ajax, formData, function (fileURL) {
+    send_image_ajax(url_image_ajax, formData, function (fileURL) {
         //window.open(fileURL);
     });
 }
