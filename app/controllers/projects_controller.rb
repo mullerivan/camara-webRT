@@ -47,7 +47,9 @@ class ProjectsController < ApplicationController
 
   # GET /projects/1
   # GET /projects/1.json
-  def show
+  def show    
+    @project = Project.find params[:id]
+    @videos = @project.videos
   end
 
   # GET /projects/new
