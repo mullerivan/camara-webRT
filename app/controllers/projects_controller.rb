@@ -3,6 +3,22 @@ class ProjectsController < ApplicationController
 
   # GET /projects
   # GET /projects.json
+
+  def ajax_video_update
+
+    video = params[:'video-blob']
+    params[:project_id]
+    File.open('/tmp/test.wb', 'wb') do |f|
+      f.write video.read
+    end
+
+    respond_to do |format|
+      format.html { render nothing: :true }
+      format.js { render nothing: :true }
+    end
+
+  end
+
   def index
     @projects = Project.all
   end

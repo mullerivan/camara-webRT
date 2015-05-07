@@ -42,7 +42,7 @@ function onMediaSuccess(stream) {
 
 
 
-        send_video_ajax('<%= Rails.application.routes.url_helpers.project_video_ajax_video_update_path %>', formData, function (fileURL) {
+        send_video_ajax(url_ajax, formData, function (fileURL) {
             window.open(fileURL);
         });
 
@@ -98,13 +98,7 @@ function capture(video, scaleFactor) {
                 if (request.readyState == 4 && request.status == 200) {
                     callback(location.href + request.responseText);
                 }
-            };
-
-
-
-
-
-
+            };    
             $.ajax({
                     url: url,  //Server script to process data
                     type: 'POST',

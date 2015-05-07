@@ -20,9 +20,6 @@ class VideosController < ApplicationController
   end
 
 
-  def ajax_video_update
-  end
-
   # GET /videos/1/edit
   def edit
   end

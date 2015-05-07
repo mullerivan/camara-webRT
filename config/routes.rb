@@ -1,7 +1,8 @@
 Rails.application.routes.draw do  
   resources :projects do
+    post 'ajax_video_update'
     resources :videos do
-      post 'ajax_video_update'
+
       resources :snapshots
 
     end

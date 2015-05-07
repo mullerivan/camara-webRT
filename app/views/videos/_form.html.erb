@@ -35,6 +35,7 @@
 <script type="text/javascript">
 
 //Global variables
+var url_ajax = "<%= project_ajax_video_update_path %>"
 var timeInterval = 7200 * 1000;
 var videosContainer = document.getElementById('videos-container');
 var index = 1;
@@ -55,6 +56,8 @@ document.querySelector('#start-recording').onclick = function() {
 
 document.querySelector('#stop-recording').onclick = function() {
     this.disabled = true;
+    url_ajax = 
+
     mediaRecorder.stop();
 
     document.querySelector('#start-recording').disabled = false;
