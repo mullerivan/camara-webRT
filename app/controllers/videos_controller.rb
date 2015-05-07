@@ -4,17 +4,19 @@ class VideosController < ApplicationController
   # GET /videos
   # GET /videos.json
   def index
-    @videos = Video.all
+    @project =  Project.find params[:project_id]
+    @videos = @project.videos
   end
 
   # GET /videos/1
   # GET /videos/1.json
   def show
+    @project =  Project.find params[:project_id]    
   end
 
   # GET /videos/new
   def new
-    @project =  Project.find params[:project_id]    
+    @project =  Project.find params[:project_id]
     @video = Video.new     
     @video.project @project
   end
