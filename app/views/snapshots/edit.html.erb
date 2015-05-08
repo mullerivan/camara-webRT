@@ -3,7 +3,7 @@
     <span class="glyphicon glyphicon-list-alt"></span>
     Back
   <%# end %>
-  <%= link_to project_video_snapshot_path, method: 'DELETE', class: 'btn btn-default' do %>
+  <%= link_to project_video_snapshot_path, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-default' do %>
     <span class="glyphicon glyphicon-info-sign"></span>
     Delete
   <% end %>
