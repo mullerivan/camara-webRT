@@ -39,8 +39,11 @@
 
 <div id='snapshots-container'>
   <% @video.snapshots.each do |snapshot| %>
-    <img src="/videos/<%= snapshot.file %>.jpg" alt="snapshot.description" height="<%= snapshot.video.height%>" width="<%= snapshot.video.width %>">
-  
+    <%= link_to edit_project_video_snapshot_path(@video.project, @video, snapshot ) do %>  
+      <img src="/videos/<%= snapshot.file %>.jpg" alt="snapshot.name" height="<%= snapshot.video.height%>" width="<%= snapshot.video.width %>">      
+    <% end %>
+    Description:
+      <span> <%# (snapshot.description.empty?) ? 'No description provided' : snapshot.description %> </span>
 <% end %>
   
 

@@ -1,11 +1,11 @@
-<%= simple_form_for(@snapshot) do |f| %>
+<%= simple_form_for @snapshot, 
+    url: project_video_snapshot_path,
+    method: 'PATCH'  do |f| %>
   <%= f.error_notification %>
 
   <div class="form-inputs">
     <%= f.input :name %>
-    <%= f.input :description %>
-    <%= f.association :video %>
-    <%= f.input :file %>
+    <%= f.input :description %>    
   </div>
 
   <div class="form-actions">
