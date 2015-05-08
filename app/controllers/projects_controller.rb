@@ -6,8 +6,7 @@ class ProjectsController < ApplicationController
     video.meters = params[:meters]
     video.name = params[:name]
     video.description = params[:description]
-    video.save
-    raise @video.to_yaml
+    video.save    
     respond_to do |format|
       format.js { render nothing: :true }
     end
@@ -16,8 +15,8 @@ class ProjectsController < ApplicationController
   def ajax_video_update
     project = Project.find params[:project_id]
     video = params[:'video-blob']
-
-    video_count = project.videos.count + 1
+    # esto es proque si la session existe el video ya esta creado, y sino existe se crea despues!
+    video_count = (session.has_key?("video_id")) ? project.videos.count : project.videos.count + 1
     save_path = Rails.root.join("public/videos")
     video_name = "project_#{project.name}_video_#{video_count}"
 
@@ -26,27 +25,52 @@ class ProjectsController < ApplicationController
     end
 
     # we create the video for the project
-    project.videos.create project: project, file: "/videos/#{video_name}", name: video_name, width: params[:width], height: params[:height]
+    if session.has_key?("video_id")       
+      video = Video.find(session[:video_id])
+      video.file = "/videos/#{video_name}"
+      video.name = video_name
+      video.width = params[:width]
+      video.height = params[:height]
+      video.save
+      session.delete(:video_id)
+    else
+      project.videos.create project: project, file: "/videos/#{video_name}", name: video_name, width: params[:width], height: params[:height]
+    end    
     video_id = project.videos.last.id
-
     respond_to do |format|
       format.json { render :json => { :video_id => video_id } }
     end
   end
 
   # FIXME: snapshot pertenece a un video. pero si creamos un snapshot ANTES que el video?
+  # IDEAS: Creo que tenriamos que crear el video y asignarlo al projecto.
+  # grabar el id del video en la secion del usuario
+  # para despues utilizarlo en ajax_video_update, para ver si hay que crear el objeto video o solo asignarle el file!  
   # TO-DO: improve this
-  def ajax_image_update
-    project = Project.find params[:project_id]
-    image = params[:'image-image']
+  # TO-DO: 
+  #VOY A CAMBIARLE EL NOMBRE A LA FUNCION PARA DIFERENCIAR CUADO SUBIMOS SNAPSHOTS DE UN VIDEO CUANDO SE ESTA GRABANDO
+  #O UNO CUANDO LO ESTAMOS REPRODUCIONDO
 
+  def ajax_image_update_on_recording
+
+    project = Project.find params[:project_id]
+    #chekear si video_id ya existe en la session para no crear mas de un video por todos los snapshots!
+    if session.has_key?("video_id")    
+      video = Video.find(session[:video_id])   
+    else
+      video = project.videos.create project: project 
+      session[:video_id] = video.id
+    end
+        
+    image = params[:'image-image']
+    snapshot_count = video.snapshots.count + 1
     save_path = Rails.root.join("public/videos")
-    image_name = "project_#{project.name}_snapshot"
+    image_name = "project_#{project.id}_video_#{video.id}_snapshot_#{snapshot_count}"
 
     File.open("#{save_path}/#{image_name}.jpg", 'wb') do |f|
       f.write(Base64.decode64(image['data:image/jpeg;base64,'.length .. -1]))
     end
-
+    video.snapshots.create video: video, file: image_name
     respond_to do |format|
       format.js { render nothing: :true }
     end

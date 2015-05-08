@@ -5,7 +5,7 @@
     <input type="text" id="video-height" value="240">
     <button id="start-recording"  class="btn btn-success" >Start Recording</button>
     <button id="stop-recording" class="btn btn-danger" disabled>Stop Recording</button>
-    <button id="snapshot" class="btn btn-primary" disabled>Snapshot</button>
+    <button id="snapshot_on_recording" class="btn btn-primary" disabled>Snapshot</button>
 </div>
     <div id="videos-container"></div>
     <div id="uploaded-videos-container"></div>
@@ -14,12 +14,13 @@
 
 //Global variables
 var url_ajax = "<%= project_ajax_video_update_path %>"
-var url_image_ajax = "<%= project_ajax_image_update_path %>"
+var url_image_on_recording_ajax = "<%= project_ajax_image_update_on_recording_path %>"
+
 var url_video_metadata_ajax = "<%= project_ajax_videometadata_update_path %>"
 var videos_container = document.getElementById('videos-container');
 var uploaded_videos_container = document.getElementById('uploaded-videos-container');
 //buttons controller
-document.querySelector('#snapshot').onclick = function() {
+document.querySelector('#snapshot_on_recording').onclick = function() {
     var v = document.getElementsByTagName('video');
     var c =capture(v[0]);
     var dataURI = c.toDataURL('image/jpeg'); // can also use 'image/png'
@@ -29,12 +30,15 @@ document.querySelector('#snapshot').onclick = function() {
     uploaded_videos_container.appendChild(img);    
     form_data.append('image-filename', 'snapshot');
     form_data.append('image-image', dataURI);
-    sendImageAjax(url_image_ajax, form_data, function (fileURL) {
+    form_data.append('video_id', 0);
+    sendImageAjax(url_image_on_recording_ajax, form_data, function (fileURL) {
     });
 }
 
 document.querySelector('#start-recording').onclick = function() {
     this.disabled = true;
+    document.querySelector('#stop-recording').disabled = false;
+    document.querySelector('#snapshot_on_recording').disabled = false;
     navigator.getUserMedia(media_constraints, onMediaSuccess, onMediaError);
 };
 
@@ -42,7 +46,7 @@ document.querySelector('#stop-recording').onclick = function() {
     this.disabled = true;   
     media_recorder.stop();
     document.querySelector('#start-recording').disabled = false;
-    document.querySelector('#snapshot').disabled = true;
+    document.querySelector('#snapshot_on_recording').disabled = true;
     //delete video element
     var v = document.getElementsByTagName('video');
     v = document.querySelector('#video-player');

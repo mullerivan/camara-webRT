@@ -23,7 +23,10 @@
 
   <dt>Meters:</dt>
   <dd><%= @video.meters %></dd>
-  
+
+  <dt>amount of snapshots:</dt>
+  <dd><%= @video.snapshots.count %></dd>
+
   <dt>Video:</dt>
   <video width= "<%=@video.width%>" height= "<%=@video.height%>" controls>
   <source src="<%= @video.file %>" type="video/webm">

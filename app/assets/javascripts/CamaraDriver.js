@@ -42,9 +42,8 @@ function onMediaSuccess(stream) {
     // get blob after specific time interval
     media_recorder.start(time_interval);
 
-    document.querySelector('#stop-recording').disabled = false;
-    document.querySelector('#snapshot').disabled = false;
 }
+
 function onMediaError(e) {
     console.error('media error', e);
 }
