@@ -13,6 +13,9 @@ class ProjectsController < ApplicationController
   end
 
   def ajax_video_update
+    #esta funcion Crea o asigna los valores a un vide
+    #trabaja en conjunto con ajax_image_update_on_recording
+    #ambas funcones utilizan video_id dentro de la session del usuario
     project = Project.find params[:project_id]
     video = params[:'video-blob']
     # esto es proque si la session existe el video ya esta creado, y sino existe se crea despues!
@@ -24,7 +27,7 @@ class ProjectsController < ApplicationController
       f.write video.read
     end
 
-    # we create the video for the project
+    # Chekeamos si el video ya existe por un snapshot!
     if session.has_key?("video_id")       
       video = Video.find(session[:video_id])
       video.file = "/videos/#{video_name}"
@@ -36,23 +39,19 @@ class ProjectsController < ApplicationController
     else
       project.videos.create project: project, file: "/videos/#{video_name}", name: video_name, width: params[:width], height: params[:height]
     end    
+    #este valor es para el form que luego actualiza la metadata!
     video_id = project.videos.last.id
     respond_to do |format|
       format.json { render :json => { :video_id => video_id } }
     end
   end
 
-  # FIXME: snapshot pertenece a un video. pero si creamos un snapshot ANTES que el video?
-  # IDEAS: Creo que tenriamos que crear el video y asignarlo al projecto.
-  # grabar el id del video en la secion del usuario
-  # para despues utilizarlo en ajax_video_update, para ver si hay que crear el objeto video o solo asignarle el file!  
-  # TO-DO: improve this
-  # TO-DO: 
-  #VOY A CAMBIARLE EL NOMBRE A LA FUNCION PARA DIFERENCIAR CUADO SUBIMOS SNAPSHOTS DE UN VIDEO CUANDO SE ESTA GRABANDO
-  #O UNO CUANDO LO ESTAMOS REPRODUCIONDO
-
+  
   def ajax_image_update_on_recording
-
+    #Esta funcion crea un objeto video mientas se esta grabando
+    #para asignar los snapshots al mismo
+    #trabaja en conjunto con ajax_video_update
+    #ambas funcones utilizan video_id dentro de la session del usuario
     project = Project.find params[:project_id]
     #chekear si video_id ya existe en la session para no crear mas de un video por todos los snapshots!
     if session.has_key?("video_id")    
@@ -70,6 +69,7 @@ class ProjectsController < ApplicationController
     File.open("#{save_path}/#{image_name}.jpg", 'wb') do |f|
       f.write(Base64.decode64(image['data:image/jpeg;base64,'.length .. -1]))
     end
+    #creamos el objeto snapshot!
     video.snapshots.create video: video, file: image_name
     respond_to do |format|
       format.js { render nothing: :true }
