@@ -54,9 +54,11 @@ class SnapshotsController < ApplicationController
   # DELETE /snapshots/1
   # DELETE /snapshots/1.json
   def destroy
+    video = @snapshot.video
+    project = video.project
     @snapshot.destroy
     respond_to do |format|
-      format.html { redirect_to snapshots_url, notice: 'Snapshot was successfully destroyed.' }
+      format.html { redirect_to project_video_path(project,video ), notice: 'Snapshot was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
