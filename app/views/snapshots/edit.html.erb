@@ -1,8 +1,8 @@
 <div class="page-header">
-  <%# link_to snapshots_path, class: 'btn btn-default' do %>
+  <%= link_to project_video_path(@snapshot.video.project,@snapshot.video), class: 'btn btn-default' do %>
     <span class="glyphicon glyphicon-list-alt"></span>
     Back
-  <%# end %>
+  <% end %>
   <%= link_to project_video_snapshot_path, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-default' do %>
     <span class="glyphicon glyphicon-info-sign"></span>
     Delete
