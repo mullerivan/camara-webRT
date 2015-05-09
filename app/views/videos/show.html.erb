@@ -43,7 +43,7 @@
       <img src="/videos/<%= snapshot.file %>.jpg" alt="snapshot.name" height="<%= snapshot.video.height%>" width="<%= snapshot.video.width %>">      
     <% end %>
     Description:
-      <span> <%# (snapshot.description.empty?) ? 'No description provided' : snapshot.description %> </span>
+      <span> <%= snapshot.description %> </span>
 <% end %>
   
 
