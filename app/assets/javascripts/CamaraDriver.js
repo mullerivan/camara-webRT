@@ -130,7 +130,6 @@ function insertFormForVideo(blob,video_id) {
     a.target = '_blank';
     a.innerHTML = 'Open Recorded Video No. ' + (index++) + ' (Size: ' + bytesToSize(blob.size) + ') :';
     a.href = URL.createObjectURL(blob);
-    uploaded_videos_container.appendChild(document.createElement('hr'));
     uploaded_videos_container.appendChild(a);
 
     var name_label = document.createElement("label");                          
@@ -191,4 +190,9 @@ function sendMetadataAjax(){
             data: queryString,
             contentType: "application/x-www-form-urlencoded",
         });
+
+    var element = document.getElementById("video-form-metadata");
+    element.parentNode.removeChild(element);
+    uploaded_videos_container.innerHtml += 'Metadata Uploaded!';
+    uploaded_videos_container.appendChild(document.createTextNode('Metadata Uploaded!'));
 }
