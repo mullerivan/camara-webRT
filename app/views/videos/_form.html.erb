@@ -20,16 +20,19 @@ var videos_container = document.getElementById('videos-container');
 var uploaded_videos_container = document.getElementById('uploaded-videos-container');
 //buttons controller
 document.querySelector('#snapshot_on_recording').onclick = function() {
-    var v = document.getElementsByTagName('video');
-    var c =capture(v[0]);
+    var v = document.getElementsByTagName('video')[0];
+    var c = capture(v);
+    var current_time = v.currentTime;
     var dataURI = c.toDataURL('image/jpeg'); // can also use 'image/png'
     var img = document.createElement('img');
     var form_data = new FormData();
+
     img.src = dataURI;
     uploaded_videos_container.appendChild(img);    
     form_data.append('image-filename', 'snapshot');
     form_data.append('image-image', dataURI);
     form_data.append('video_id', 0);
+    form_data.append('current_time', current_time);
     sendImageAjax(url_image_on_recording_ajax, form_data, function (fileURL) {
     });
 }

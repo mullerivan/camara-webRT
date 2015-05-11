@@ -62,6 +62,7 @@ class ProjectsController < ApplicationController
     end
         
     image = params[:'image-image']
+    video_time = params[:current_time]
     snapshot_count = video.snapshots.count + 1
     save_path = Rails.root.join("public/videos")
     image_name = "project_#{project.id}_video_#{video.id}_snapshot_#{snapshot_count}"
@@ -70,7 +71,7 @@ class ProjectsController < ApplicationController
       f.write(Base64.decode64(image['data:image/jpeg;base64,'.length .. -1]))
     end
     #creamos el objeto snapshot!
-    video.snapshots.create video: video, file: image_name
+    video.snapshots.create video: video, file: image_name, time: video_time
     respond_to do |format|
       format.js { render nothing: :true }
     end
